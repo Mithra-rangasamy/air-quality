@@ -1,0 +1,38 @@
+{
+  "GREEN": {
+    "icon": "🟢",
+    "level": "GREEN",
+    "title": "Good Air Quality",
+    "advice": "Air quality is satisfactory and poses little or no health risk. Safe for all outdoor activities and exercise."
+  },
+  "YELLOW": {
+    "icon": "🟡",
+    "level": "YELLOW",
+    "title": "Moderate Air Quality",
+    "advice": "Air quality is acceptable; however, unusually sensitive individuals should consider limiting prolonged outdoor exertion."
+  },
+  "ORANGE": {
+    "icon": "🟠",
+    "level": "ORANGE",
+    "title": "Unhealthy for Sensitive Groups",
+    "advice": "Members of sensitive groups (children, elderly, asthma/heart patients) may experience health effects and should avoid strenuous outdoor activity."
+  },
+  "RED": {
+    "icon": "🔴",
+    "level": "RED",
+    "title": "Hazardous Air Quality",
+    "advice": "Health alert: serious risk for the entire population. Avoid outdoor exertion, keep windows closed, and use N95 masks."
+  },
+  "COMPOUND": {
+    "icon": "🚨",
+    "level": "COMPOUND ALERT",
+    "title": "Dual Convergence Outbreak",
+    "advice": "Critical public health warning: severe pollution coincides with a verified spike in citizen respiratory illness. Seek prompt medical care if breathless."
+  },
+  "STALE": {
+    "icon": "⚪",
+    "level": "DATA UPDATING",
+    "title": "Telemetry Updating",
+    "advice": "Station telemetry is temporarily updating or offline. Exercise routine precautionary measures until fresh readings arrive."
+  }
+}

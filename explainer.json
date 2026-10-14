@@ -1,0 +1,50 @@
+{
+  "aqi_bands": [
+    {
+      "range": "0 - 50",
+      "level": "Good (Green)",
+      "badge_color": "#22c55e",
+      "icon": "🟢",
+      "meaning": "Clean, fresh air. Air pollution poses minimal or no health risk to anyone."
+    },
+    {
+      "range": "51 - 100",
+      "level": "Satisfactory (Yellow)",
+      "badge_color": "#eab308",
+      "icon": "🟡",
+      "meaning": "Acceptable air quality. A very small number of individuals who are unusually sensitive may experience mild irritation."
+    },
+    {
+      "range": "101 - 200",
+      "level": "Moderate / Unhealthy for Sensitive Groups (Orange)",
+      "badge_color": "#f97316",
+      "icon": "🟠",
+      "meaning": "Breathing discomfort to sensitive individuals (children, asthmatics, elderly). General public is less likely to be affected."
+    },
+    {
+      "range": "201 - 300+",
+      "level": "Poor / Hazardous (Red)",
+      "badge_color": "#ef4444",
+      "icon": "🔴",
+      "meaning": "Hazardous pollution. Triggers breathing difficulty for all residents and serious aggravated symptoms for cardiopulmonary patients."
+    }
+  ],
+  "pollutants": {
+    "pm25": {
+      "name": "PM2.5 (Fine Inhalable Particles)",
+      "description": "Microscopic dust and soot particles smaller than 2.5 micrometers (about 30 times thinner than a human hair). Produced by vehicle exhausts, burning, and industrial smoke. Because they are tiny, they bypass nose and throat filters, penetrating directly into deep lung tissue and entering your bloodstream."
+    },
+    "pm10": {
+      "name": "PM10 (Coarse Inhalable Dust)",
+      "description": "Inhalable particles smaller than 10 micrometers (dust from unpaved roads, construction, crushing, and wind-blown soil). They cause nasal congestion, persistent coughing, and throat and eye irritation."
+    }
+  },
+  "risk_score": {
+    "title": "Composite Health-Risk Score (0 - 100)",
+    "description": "Traditional AQI only monitors physical sensors in the atmosphere. Our Big Data early-warning engine fuses ambient environmental telemetry (70% weight) with live citizen-reported illness reports (30% weight). When local residents report rising coughing or shortness of breath, the score escalates immediately—alerting public health officials to emerging disease plumes even before sensors detect peak concentrations."
+  },
+  "compound_alert": {
+    "title": "Compound Health Convergence Alert (🚨)",
+    "description": "An emergency escalation triggered only when TWO conditions occur simultaneously: high ambient pollution coincides directly with an anomalous surge in local citizen health reports. This eliminates false alarms and flags verified health crises where toxic air is actively harming real people in that specific neighborhood right now."
+  }
+}

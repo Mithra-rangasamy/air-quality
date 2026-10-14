@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Air Quality & Public Health Situation Report | CIT 21MDS56</title>
+    <link rel="stylesheet" href="/static/css/styles.css?v=4.0">
+    <style>
+        .report-page {
+            max-width: 900px;
+            margin: 1.5rem auto;
+            background: #ffffff;
+            color: #1e293b;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #0f172a;
+            padding-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+        .report-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+        .report-subtitle {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+        .report-meta {
+            text-align: right;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .report-stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .report-stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #64748b;
+        }
+        .report-stat-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-top: 0.25rem;
+        }
+        .report-section-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 0.4rem;
+            margin: 1.5rem 0 0.75rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            margin-bottom: 1.25rem;
+        }
+        .report-table th, .report-table td {
+            border: 1px solid #cbd5e1;
+            padding: 6px 10px;
+            text-align: left;
+        }
+        .report-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.72rem;
+        }
+        .badge-print {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 10px;
+            color: #ffffff;
+        }
+        .print-btn-bar {
+            max-width: 900px;
+            margin: 1rem auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+        @media print {
+            body { background: #fff !important; }
+            .print-btn-bar, .navbar { display: none !important; }
+            .report-page {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body style="background: #0b1120; min-height: 100vh; padding: 1rem;">
+
+    <!-- Top Action Bar (Hidden during print) -->
+    <div class="print-btn-bar no-print">
+        <div style="display:flex; align-items:center; gap: 10px;">
+            <a href="/admin" class="btn btn-secondary">← Back to Admin Console</a>
+            <select id="report-date-select" class="form-select" style="min-height:36px; padding:4px 8px; font-size:12px; width:auto; background:#1e293b; color:#fff;">
+                <option value="">Loading dates...</option>
+            </select>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button onclick="window.print()" class="btn btn-primary">
+                🖨️ Print / Save as PDF
+            </button>
+        </div>
+    </div>
+
+    <!-- Printable Situation Report Container -->
+    <div class="report-page print-report-container" id="printable-area">
+        <header class="report-header">
+            <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800; color: #0284c7; margin-bottom: 2px;">
+                    Department of Public Health &amp; Municipal Environmental Surveillance
+                </div>
+                <h1 class="report-title">Daily Air Quality &amp; Public Health Situation Report</h1>
+                <div class="report-subtitle">CIT 21MDS56 Big Data Early-Warning Computing System &bull; Multi-Modal Synthesis</div>
+            </div>
+            <div class="report-meta">
+                <div><strong>Surveillance Date:</strong> <span id="rep-date">2026-10-13</span></div>
+                <div><strong>Generated:</strong> <span id="rep-generated">Loading...</span></div>
+                <div><strong>Classification:</strong> <span style="color:#dc2626; font-weight:bold;">OFFICIAL SITREP</span></div>
+            </div>
+        </header>
+
+        <!-- Summary Metrics Grid -->
+        <section class="report-grid">
+            <div class="report-stat-card">
+                <div class="report-stat-label">Critical Red Zones</div>
+                <div class="report-stat-value" id="rep-red" style="color: #ef4444;">--</div>
+            </div>
+            <div class="report-stat-card">
+                <div class="report-stat-label">Orange Zones</div>
+                <div class="report-stat-value" id="rep-orange" style="color: #f97316;">--</div>
+            </div>
+            <div class="report-stat-card">
+                <div class="report-stat-label">Compound Outbreaks</div>
+                <div class="report-stat-value" id="rep-compound" style="color: #dc2626;">--</div>
+            </div>
+            <div class="report-stat-card">
+                <div class="report-stat-label">Citizen Reports</div>
+                <div class="report-stat-value" id="rep-complaints" style="color: #0284c7;">--</div>
+            </div>
+            <div class="report-stat-card">
+                <div class="report-stat-label">Peak Ambient AQI</div>
+                <div class="report-stat-value" id="rep-peak-aqi" style="color: #0f172a;">--</div>
+            </div>
+        </section>
+
+        <!-- Top 10 Highest Risk Zones Table -->
+        <div class="report-section-title">
+            <span>🚨 Priority Response Zones (Top 10 Ranked by Composite Risk)</span>
+            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">Threshold: Risk &ge; 50 or Compound Outbreak</span>
+        </div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Zone &amp; City</th>
+                    <th>Risk Score</th>
+                    <th>Risk Tier</th>
+                    <th>AQI</th>
+                    <th>Reports</th>
+                    <th>Dominant Concern</th>
+                    <th>Outbreak Status</th>
+                </tr>
+            </thead>
+            <tbody id="rep-table-tbody">
+                <tr><td colspan="8" style="text-align:center;">Loading priority zones...</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Municipal Alert Action Tracker Summary (Feature 9) -->
+        <div class="report-section-title">
+            <span>🛡️ Municipal Alert Actions &amp; Interventions</span>
+            <span style="font-size:0.75rem; color:#64748b; font-weight:normal;">Status: Open / Acknowledged / Action Taken / Resolved</span>
+        </div>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>Zone</th>
+                    <th>Current Status</th>
+                    <th>Latest Action Taken / Notes</th>
+                    <th>Updated By</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="rep-actions-tbody">
+                <tr><td colspan="5" style="text-align:center;">Loading action tracker logs...</td></tr>
+            </tbody>
+        </table>
+
+        <!-- Risk Distribution Chart (Printable SVG) -->
+        <div class="report-section-title">
+            <span>📊 Health Risk Distribution Across Monitored Networks</span>
+        </div>
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:1.5rem; text-align:center;">
+            <svg id="rep-chart-svg" width="100%" height="80" viewBox="0 0 700 80">
+                <!-- SVG Bars injected dynamically -->
+            </svg>
+        </div>
+
+        <!-- Recommended Clinical Actions Summary -->
+        <div class="report-section-title">
+            <span>📋 Standard Operating Directives by Severity Tier</span>
+        </div>
+        <div style="font-size:0.8rem; line-height:1.5; color:#334155;">
+            <p style="margin-bottom:6px;"><strong>🚨 Compound Outbreak (Red + Surging Illness):</strong> Mandatory dispatch of mobile respiratory clinic, immediate N95 distribution in affected zone, suspension of construction and outdoor schools within 5 km.</p>
+            <p style="margin-bottom:6px;"><strong>🔴 Red Tier (Severe AQI / Risk &ge; 75):</strong> Enforce industrial emission curtailments, issue municipal radio/SMS advisory for sensitive groups, hospital pulmonary ICU preparedness.</p>
+            <p><strong>🟠 Orange Tier (High Risk 50 - 74):</strong> Divert heavy diesel freight from residential corridors; advise vulnerable citizens (children, elderly, asthmatics) to avoid outdoor exertion.</p>
+        </div>
+
+        <footer style="margin-top:2rem; border-top:1px solid #cbd5e1; padding-top:0.75rem; display:flex; justify-content:space-between; font-size:0.72rem; color:#64748b;">
+            <span>CIT 21MDS56 Big Data Computing Laboratory</span>
+            <span>Document Ref: SITREP-CIT-EWS-2026</span>
+            <span>Page 1 of 1</span>
+        </footer>
+    </div>
+
+    <script>
+        async function loadReport(targetDate = null) {
+            try {
+                // Load dates for dropdown
+                const dateRes = await fetch("/api/dates");
+                const dateJson = await dateRes.json();
+                const sel = document.getElementById("report-date-select");
+                sel.innerHTML = "";
+                dateJson.dates.forEach(d => {
+                    const opt = document.createElement("option");
+                    opt.value = d;
+                    opt.textContent = `Date: ${d}`;
+                    if (targetDate ? d === targetDate : d === dateJson.latest) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+
+                const activeDate = targetDate || dateJson.latest;
+                const repRes = await fetch(`/api/admin/report?date=${activeDate}`);
+                const repJson = await repRes.json();
+
+                if (repJson.status !== "success") return;
+
+                document.getElementById("rep-date").textContent = repJson.date;
+                document.getElementById("rep-generated").textContent = repJson.generated_at;
+                document.getElementById("rep-red").textContent = repJson.summary.red_zones;
+                document.getElementById("rep-orange").textContent = repJson.summary.orange_zones;
+                document.getElementById("rep-compound").textContent = repJson.summary.compound_alerts;
+                document.getElementById("rep-complaints").textContent = repJson.summary.complaints_count;
+                document.getElementById("rep-peak-aqi").textContent = Math.round(repJson.summary.peak_aqi);
+
+                // Top Zones Table
+                const tbody = document.getElementById("rep-table-tbody");
+                tbody.innerHTML = "";
+                repJson.top_zones.forEach((z, i) => {
+                    const color = z.compound_alert ? '#dc2626' : (z.risk_level === 'RED' ? '#ef4444' : (z.risk_level === 'ORANGE' ? '#f97316' : '#eab308'));
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td><strong>#${i + 1}</strong></td>
+                        <td><strong>${z.zone_name}</strong><br><small style="color:#64748b;">${z.city}</small></td>
+                        <td><strong>${z.risk_score.toFixed(1)}</strong></td>
+                        <td><span class="badge-print" style="background:${color};">${z.risk_level}</span></td>
+                        <td>${Math.round(z.avg_aqi)}</td>
+                        <td>${z.complaint_count || 0}</td>
+                        <td>${(z.dominant_pollutant_name || 'PM2.5').toUpperCase()}</td>
+                        <td>${z.compound_alert ? '<strong style="color:#dc2626;">🚨 SURGE ALERT</strong>' : 'Monitored'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Actions Table
+                const actTbody = document.getElementById("rep-actions-tbody");
+                actTbody.innerHTML = "";
+                if (repJson.alert_actions && repJson.alert_actions.length > 0) {
+                    repJson.alert_actions.slice(0, 8).forEach(a => {
+                        const tr = document.createElement("tr");
+                        const statusColor = a.status === 'Resolved' ? '#16a34a' : (a.status === 'Action taken' ? '#2563eb' : (a.status === 'Acknowledged' ? '#d97706' : '#dc2626'));
+                        tr.innerHTML = `
+                            <td><strong>${a.zone_name || a.zone_id}</strong> (${a.city || ''})</td>
+                            <td><span class="badge-print" style="background:${statusColor};">${a.status}</span></td>
+                            <td>${a.notes || 'Surveillance initiated.'}</td>
+                            <td>${a.updated_by || 'system'}</td>
+                            <td style="font-size:10px;">${a.updated_at || ''}</td>
+                        `;
+                        actTbody.appendChild(tr);
+                    });
+                } else {
+                    actTbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#64748b;">No active intervention logs for this date.</td></tr>`;
+                }
+
+                // Render Print-Compatible SVG Risk Bar
+                const total = repJson.summary.total_zones || 25;
+                const rW = (repJson.summary.red_zones / total) * 600;
+                const oW = (repJson.summary.orange_zones / total) * 600;
+                const yW = Math.max(50, 600 - rW - oW);
+
+                const svg = document.getElementById("rep-chart-svg");
+                svg.innerHTML = `
+                    <rect x="50" y="20" width="${rW}" height="30" fill="#ef4444" rx="3"></rect>
+                    <rect x="${50 + rW}" y="20" width="${oW}" height="30" fill="#f97316" rx="3"></rect>
+                    <rect x="${50 + rW + oW}" y="20" width="${yW}" height="30" fill="#22c55e" rx="3"></rect>
+                    <text x="50" y="65" font-size="11" fill="#ef4444" font-weight="bold">Red (${repJson.summary.red_zones})</text>
+                    <text x="${50 + rW}" y="65" font-size="11" fill="#f97316" font-weight="bold">Orange (${repJson.summary.orange_zones})</text>
+                    <text x="${50 + rW + oW}" y="65" font-size="11" fill="#22c55e" font-weight="bold">Yellow/Green</text>
+                `;
+
+            } catch (err) {
+                console.error("Error loading report data:", err);
+            }
+        }
+
+        document.getElementById("report-date-select").addEventListener("change", (e) => {
+            loadReport(e.target.value);
+        });
+
+        loadReport();
+    </script>
+</body>
+</html>

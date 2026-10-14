@@ -1,0 +1,11 @@
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=/opt/hadoop
+export HADOOP_HDFS_HOME=/opt/hadoop
+export HADOOP_MAPRED_HOME=/opt/hadoop
+export HADOOP_YARN_HOME=/opt/hadoop
+export HADOOP_COMMON_HOME=/opt/hadoop
+export HBASE_HOME=/opt/hbase
+export PIG_HOME=/opt/pig
+export HIVE_HOME=/opt/hive
+export HIVE_CONF_DIR=/opt/hive/conf
+export PATH=$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$JAVA_HOME/bin:$HBASE_HOME/bin:$PIG_HOME/bin:$HIVE_HOME/bin:$PATH
